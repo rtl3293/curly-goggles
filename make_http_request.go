@@ -2,11 +2,12 @@ package main
 
 import (
   "io/ioutil"
+  "fmt"
   "log"
   "net/http"
 //  "os"
   //"strings"
-//  "regexp"
+  "regexp"
   "time"
 )
 
@@ -30,14 +31,23 @@ func main() {
   }
   defer response.Body.Close()
 
-  //Copy data from the response to standard output
-  //n, err := io.Copy(os.Stdout, response.Body)
-  //if err != nil {
-  //  log.Fatal(err)
-  //}
-  dataInBytes, err := ioutil.ReadAll(response.Body)
-  pageContent := string(dataInBytes)
+  //Read Response data into memory
+  body, err := ioutil.ReadAll(response.Body)
+  if err != nil {
+    log.Fatal("Error reading HTTP body. ", err)
+  }
+
+  //Create Regex to find the captions
+  re := regexp.MustCompile(`(?i)<p class="">(.+)</p>`)
+  captions := re.FindAllStringSubmatch(string(body), -1)
+  if captions == nil {
+    fmt.Println("No matches.")
+  } else {
+      for _, caption := range captions {
+        fmt.Println(caption[1])
+      }
+  }
 
 
-  log.Println(pageContent)
+  //log.Println(pageContent)  <p class>[*]+</p>
 }
