@@ -5,8 +5,8 @@ import (
   "fmt"
   "log"
   "net/http"
-//  "os"
-  //"strings"
+//"os"
+//"strings"
   "regexp"
   "time"
 )
@@ -48,6 +48,4 @@ func main() {
       }
   }
 
-
-  //log.Println(pageContent)  <p class>[*]+</p>
 }
